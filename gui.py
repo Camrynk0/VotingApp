@@ -1,38 +1,54 @@
+# GUI structure and window locking technique based on tutorials from RealPython and the official PyQt6 documentation.
+# and the official PyQt6 documentation (doc.qt.io/qtforpython).
+
 from PyQt6 import uic
 from PyQt6.QtWidgets import QWidget
 
 class VotingApp(QWidget):
     """
-    A PyQt6 GUI application for voting between two candidates.
+    A PyQt6 GUI application for voting between two candidates with ID validation.
     """
 
     def __init__(self, voting_system):
-        """
-        Initialize the VotingApp and load the GUI from the .ui file.
-
-        Args:
-            voting_system (VotingSystem): The voting system logic object.
-        """
         super().__init__()
+        
+        # Load the GUI from gui.ui
         uic.loadUi("gui.ui", self)
+
+        # Lock the window size
+        self.setFixedSize(self.size())
 
         self.voting_system = voting_system
 
-        # Connect buttons
+        # Connect buttons to functions
         self.voteButton.clicked.connect(self.vote_clicked)
         self.exitButton.clicked.connect(self.exit_clicked)
-
+        
     def vote_clicked(self):
         """
-        Handles the Vote button click: records the vote and updates the result label.
+        Handles the Vote button click: validates input, records vote, and updates GUI.
         """
+        voter_id = self.idInput.text().strip()
         candidate = self.candidateDropdown.currentText()
+
+        if not voter_id:
+            self.resultLabel.setText("Error: ID is required!")
+            self.resultLabel.setStyleSheet("color: red;")
+            return
+
+        if self.voting_system.has_voted(voter_id):
+            self.resultLabel.setText("Error: You have already voted!")
+            self.resultLabel.setStyleSheet("color: red;")
+            return
+
         try:
-            self.voting_system.vote(candidate)
+            self.voting_system.vote(voter_id, candidate)
             self.voting_system.save_votes()
-            self.resultLabel.setText(f"Voted for {candidate}!\nTotal votes: {self.voting_system.total_votes()}")
+            self.resultLabel.setText(f"Success: Voted for {candidate}!")
+            self.resultLabel.setStyleSheet("color: green;")
         except ValueError as e:
             self.resultLabel.setText(str(e))
+            self.resultLabel.setStyleSheet("color: red;")
 
     def exit_clicked(self):
         """

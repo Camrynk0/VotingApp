@@ -1,3 +1,5 @@
+# Application launching structure based on PyQt6 official documentation.
+
 import sys
 from PyQt6.QtWidgets import QApplication
 from voting_system import VotingSystem

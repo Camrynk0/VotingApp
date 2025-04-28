@@ -6,18 +6,35 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>300</width>
-    <height>200</height>
+    <width>320</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Voting App</string>
   </property>
+  
+  <!-- ID input field -->
+  <widget class="QLineEdit" name="idInput">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>30</y>
+     <width>140</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Enter ID</string>
+   </property>
+  </widget>
+
+  <!-- Candidate selection dropdown -->
   <widget class="QComboBox" name="candidateDropdown">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>30</y>
+     <x>90</x>
+     <y>80</y>
      <width>140</width>
      <height>30</height>
     </rect>
@@ -33,25 +50,29 @@
     </property>
    </item>
   </widget>
+
+  <!-- Vote button -->
   <widget class="QPushButton" name="voteButton">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>70</y>
-     <width>100</width>
+     <x>90</x>
+     <y>130</y>
+     <width>140</width>
      <height>30</height>
     </rect>
    </property>
    <property name="text">
-    <string>Vote</string>
+    <string>Submit Vote</string>
    </property>
   </widget>
+
+  <!-- Exit button -->
   <widget class="QPushButton" name="exitButton">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>110</y>
-     <width>100</width>
+     <x>90</x>
+     <y>170</y>
+     <width>140</width>
      <height>30</height>
     </rect>
    </property>
@@ -59,13 +80,15 @@
     <string>Exit</string>
    </property>
   </widget>
+
+  <!-- Result label -->
   <widget class="QLabel" name="resultLabel">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>150</y>
-     <width>180</width>
-     <height>30</height>
+     <x>40</x>
+     <y>220</y>
+     <width>240</width>
+     <height>50</height>
     </rect>
    </property>
    <property name="text">
@@ -75,6 +98,7 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
+
  </widget>
  <resources/>
  <connections/>
