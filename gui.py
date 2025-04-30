@@ -30,7 +30,22 @@ class VotingApp(QWidget):
         """
         voter_id = self.idInput.text().strip()
         candidate = self.candidateDropdown.currentText()
+        # Validate ID: must be 7-digit positive integer
+        if not voter_id.isdigit():
+            self.resultLabel.setText("Error: ID must be a whole number!")
+            self.resultLabel.setStyleSheet("color: red;")
+            return
 
+        if len(voter_id) != 7:
+            self.resultLabel.setText("Error: ID must be exactly 7 digits!")
+            self.resultLabel.setStyleSheet("color: red;")
+            return
+
+        if int(voter_id) <= 0:
+            self.resultLabel.setText("Error: ID must be a positive number!")
+            self.resultLabel.setStyleSheet("color: red;")
+            return
+        
         if not voter_id:
             self.resultLabel.setText("Error: ID is required!")
             self.resultLabel.setStyleSheet("color: red;")
@@ -40,7 +55,7 @@ class VotingApp(QWidget):
             self.resultLabel.setText("Error: You have already voted!")
             self.resultLabel.setStyleSheet("color: red;")
             return
-
+        
         try:
             self.voting_system.vote(voter_id, candidate)
             self.voting_system.save_votes()
