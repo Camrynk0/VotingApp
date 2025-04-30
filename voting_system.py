@@ -1,6 +1,8 @@
 # CSV file saving based on official Python csv module documentation (docs.python.org/csv).
 
 import csv
+import os
+from datetime import datetime
 from typing import Dict, Set
 
 class VotingSystem:
@@ -44,23 +46,48 @@ class VotingSystem:
         self.votes[candidate] += 1
         self.voted_ids.add(voter_id)
 
-    def save_votes(self, filename: str = "data/votes.csv") -> None:
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self._save_vote(voter_id, candidate, timestamp)
+
+    def _save_vote(self, voter_id: str, candidate: str, timestamp: str, filename: str = "data/votes.csv") -> None:
         """
         Saves the vote records to a CSV file.
 
         Args:
             filename (str): The output CSV file name.
         """
-        try:
-            with open(filename, mode='w', newline='') as file:
-                writer = csv.writer(file)
-                writer.writerow(["Voter ID", "Candidate"])
-                for voter_id in self.voted_ids:
-                    for candidate, count in self.votes.items():
-                        # Simplified: Normally would store individual votes
-                        writer.writerow([voter_id, candidate])
-        except Exception as e:
-            print(f"Error saving votes: {e}")
+        # Append the new vote
+        file_exists = os.path.isfile(filename)
+        with open(filename, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            if not file_exists:
+                writer.writerow(["Voter ID", "Candidate", "Timestamp"])
+            writer.writerow([voter_id, candidate, timestamp])
+
+        # Read existing votes to calculate totals
+        vote_counts = {}
+        with open(filename, mode='r', newline='') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                cand = row["Candidate"]
+                if cand in self.votes:
+                    vote_counts[cand] = vote_counts.get(cand, 0) + 1
+
+        # Remove existing summary rows
+        lines = []
+        with open(filename, mode='r', newline='') as file:
+            lines = [line for line in file if not line.startswith("Total Votes")]
+
+        with open(filename, mode='w', newline='') as file:
+            file.writelines(lines)
+
+        # Append the summary row
+        with open(filename, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            summary = ["Total Votes"]
+            for candidate in self.votes:
+                summary.append(f"{candidate}: {vote_counts.get(candidate, 0)}")
+            writer.writerow(summary)
 
     def total_votes(self) -> int:
         """

@@ -58,7 +58,6 @@ class VotingApp(QWidget):
         
         try:
             self.voting_system.vote(voter_id, candidate)
-            self.voting_system.save_votes()
             self.resultLabel.setText(f"Success: Voted for {candidate}!")
             self.resultLabel.setStyleSheet("color: green;")
         except ValueError as e:
@@ -69,5 +68,4 @@ class VotingApp(QWidget):
         """
         Handles the Exit button click: saves votes and closes the application.
         """
-        self.voting_system.save_votes()
         self.close()
