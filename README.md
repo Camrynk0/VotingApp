@@ -6,7 +6,6 @@ Users can vote for two candidates, and results are saved automatically to a CSV 
 ## 📋 Features
 - PyQt6 GUI designed with Qt Designer
 - OOP structure with a VotingSystem class
-- Dynamic loading of `.ui` file for GUI
 - Data validation and exception handling
 - Votes saved automatically to `data/votes.csv`
 - Organized modular code (main.py, gui.py, voting_system.py)
